@@ -24,7 +24,7 @@ int pwm(int x) {
   if (x == 512) {
     x = 0;
   }
-  out = map(x, 0, 1023, 0, 255); //Map the output to a PWM value
+  out = map(x, 0, 1023, 50, 120); //Map the output to a PWM value
   return out; //Return the value
 }
 
