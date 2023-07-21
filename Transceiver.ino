@@ -3,18 +3,12 @@
 //TODO Sende analoge daten für joystick
 RF24 radio(9, 10); // (CE, CSN)
 const byte address[6] = "1RF24";
-struct dataStruct {
-    int X1;
-    int Y1;
-	int X2;
-	int Y2;
 
-} myData;
 
 void setup() {
   radio.begin();
   radio.setPALevel(RF24_PA_MAX);
-  radio.setChannel(50);
+  radio.setChannel(70);
   radio.openWritingPipe(address);
   radio.stopListening();
   Serial.begin(9600);

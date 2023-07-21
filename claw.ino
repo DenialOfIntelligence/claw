@@ -1,4 +1,24 @@
+#include <RF24_config.h>
+#include <RF24.h>
+#include <printf.h>
+#include <nRF24L01.h>
+
+#include <SPI.h>
+#include <RF24.h>
+RF24 radio(7,8);
+struct dataStruct {
+    int X1;
+    int Y1;
+	int X2;
+	int Y2;
+
+} myData;
 void setup() {
+  radio.begin();
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setChannel(70);
+  radio.openReadingPipe(0, address);
+  radio.startListening();
   pinMode(2, OUTPUT);   // M1
   pinMode(3, OUTPUT);   //     (PWM)
   pinMode(4, OUTPUT);   // M2
@@ -29,53 +49,56 @@ int pwm(int x) {
 }
 
 void loop() {
-  if (analogRead(A0) < 100) {
-    digitalWrite(2, LOW);
-    digitalWrite(3, HIGH);
-    analogWrite(6, pwm(analogRead(A0)));
-  }
+  if (radio.avalible()){
+    radio.read( &myData, sizeof(myData) );
+    if (myData.X1 < 100) {
+      digitalWrite(2, LOW);
+      digitalWrite(3, HIGH);
+      analogWrite(6, pwm(myData.X1));
+    }
 
-  if (analogRead(A0) > 700) {
-    digitalWrite(2, HIGH);
-    digitalWrite(3, LOW);
-    analogWrite(6, pwm(analogRead(A0)));
-  }
+    if myData.X1) > 700) {
+      digitalWrite(2, HIGH);
+      digitalWrite(3, LOW);
+      analogWrite(6, pwm(myData.X1));
+    }
 
-  if (analogRead(A1) < 100) {
-    digitalWrite(4, HIGH);
-    digitalWrite(5, LOW);
-    analogWrite(9, pwm(analogRead(A1)));
-  }
+    if (myData.Y1 < 100) {
+      digitalWrite(4, HIGH);
+      digitalWrite(5, LOW);
+      analogWrite(9, pwm(myData.Y1));
+    }
 
-  if (analogRead(A1) > 700) {
-    digitalWrite(4, HIGH);
-    digitalWrite(5, LOW);
-    analogWrite(9, pwm(analogRead(A1)));
-  }
+    if (myData.Y1 > 700) {
+      digitalWrite(4, HIGH);
+      digitalWrite(5, LOW);
+      analogWrite(9, pwm(myData.Y1));
+    }
 
-  if (analogRead(A2) < 100) {
-    digitalWrite(18, LOW);
-    digitalWrite(19, HIGH);
-    analogWrite(10, pwm(analogRead(A2)));
-  }
+    if (myData.X2 < 100) {
+      digitalWrite(18, LOW);
+      digitalWrite(19, HIGH);
+      analogWrite(10, pwm(myData.X2));
+    }
 
-  if (analogRead(A2) > 700) {
-    digitalWrite(18, HIGH);
-    digitalWrite(19, LOW);
-    analogWrite(10, pwm(analogRead(A2)));
-  }
+    if (myData.X2 > 700) {
+      digitalWrite(18, HIGH);
+      digitalWrite(19, LOW);
+      analogWrite(10, pwm(myData.X2));
+    }
 
-  if (analogRead(A3) < 100) {
-    digitalWrite(20, HIGH);
-    digitalWrite(21, LOW);
-    analogWrite(11, pwm(analogRead(A3)));
-  }
+    if (myData.Y2 < 100) {
+      digitalWrite(20, HIGH);
+      digitalWrite(21, LOW);
+      analogWrite(11, pwm(myData.Y2));
+    }
 
-  if (analogRead(A3) > 700) {
-    digitalWrite(20, HIGH);
-    digitalWrite(21, LOW);
-    analogWrite(11, pwm(analogRead(A3)));
-  }
+    if (myData.Y2 > 700) {
+      digitalWrite(20, HIGH);
+      digitalWrite(21, LOW);
+      analogWrite(11, pwm(myData.Y2));
+    }
 
-  delay(100);
+    delay(100);
+  }
 }
